@@ -17,10 +17,10 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@primeuix/themes": "^3.1.1",
+    "@primeuix/themes": "^2.0.3",
     "pinia": "^4.0.3",
-    "primeicons": "^8.0.2",
-    "primevue": "^5.0.5",
+    "primeicons": "^7.0.0",
+    "primevue": "~4.5.5",
     "vue": "^3.5.42",
     "vue-router": "^5.3.1"
   },
