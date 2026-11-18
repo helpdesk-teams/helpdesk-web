@@ -1,0 +1,11 @@
+# Code owners are asked for review automatically when a PR touches their files.
+# Later rules override earlier ones for the same path.
+
+# Everything in this repository belongs to the frontend team
+*              @helpdesk-teams/frontend
+
+# These folders mirror the backend API contract, so the backend team
+# is asked to review changes here as well
+/src/types/    @helpdesk-teams/frontend @helpdesk-teams/backend
+/src/api/      @helpdesk-teams/frontend @helpdesk-teams/backend
+/mocks/        @helpdesk-teams/frontend @helpdesk-teams/backend
