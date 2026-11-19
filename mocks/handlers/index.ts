@@ -1,11 +1,13 @@
 import { http, HttpResponse } from 'msw'
-import { API_URL } from '@/config'
+import { apiPath } from '../utils'
+import { authHandlers } from './auth'
 
 /**
  * All request handlers. Each handler describes one endpoint:
- * "when the app sends GET /api/health, answer with this JSON".
- * Auth, tickets and AI handlers are added in the next steps.
+ * "when the app sends POST /api/auth/login, answer like this".
+ * Tickets and AI handlers are added in the next step.
  */
 export const handlers = [
-  http.get(`${API_URL}/health`, () => HttpResponse.json({ status: 'ok', mocked: true })),
+  http.get(apiPath('/health'), () => HttpResponse.json({ status: 'ok', mocked: true })),
+  ...authHandlers,
 ]
