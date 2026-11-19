@@ -21,6 +21,7 @@ export type MockErrorCode =
   | 'FORBIDDEN'
   | 'NOT_FOUND'
   | 'INVALID_TRANSITION'
+  | 'TICKET_CLOSED'
 
 /** Error in the contract format: { error: { code, message, details? } } */
 export function apiError(
