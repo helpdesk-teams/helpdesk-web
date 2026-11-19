@@ -1,6 +1,9 @@
 /**
- * Data shapes from the API contract (spec section 4).
- * At stage 7 these can be replaced by types generated from the backend's openapi.yaml.
+ * App types: what pages, stores and components work with.
+ *
+ * They don't have to match the server 1:1. The wire format lives in src/api/dto.ts,
+ * and adapters in src/api/adapters.ts translate between the two. If the backend
+ * renames a field, these types (and everything using them) stay the same.
  */
 import type { Role, TicketCategory, TicketPriority, TicketStatus } from '@/utils/constants'
 
@@ -49,13 +52,4 @@ export interface TicketWithComments extends Ticket {
 export interface Paginated<T> {
   items: T[]
   total: number
-}
-
-/** Error body returned by the gateway: { error: { code, message, details? } } */
-export interface ApiErrorBody {
-  error: {
-    code: string
-    message: string
-    details?: unknown
-  }
 }
