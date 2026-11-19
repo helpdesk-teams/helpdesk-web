@@ -8,6 +8,22 @@ import './assets/main.css'
 
 import App from './App.vue'
 import router from './router'
+import { USE_MOCKS } from './config'
+
+/**
+ * Start MSW before the app sends its first request.
+ * The dynamic import() keeps the mock code in a separate chunk,
+ * which is downloaded only when mocks are on.
+ */
+async function enableMocking() {
+  // `import.meta.env.DEV` is checked right here (not only inside USE_MOCKS):
+  // Vite replaces it with `false` in `vite build`, so the bundler sees dead code
+  // and drops the import below. Hidden in another module, it can't tell.
+  if (!import.meta.env.DEV || !USE_MOCKS) return
+  const { worker } = await import('../mocks/browser')
+  // 'bypass': requests without a handler (Vite files, fonts…) go to the network as usual
+  await worker.start({ onUnhandledFrame: 'bypass' })
+}
 
 const app = createApp(App)
 
@@ -24,4 +40,4 @@ app.use(PrimeVue, {
   },
 })
 
-app.mount('#app')
+enableMocking().then(() => app.mount('#app'))
