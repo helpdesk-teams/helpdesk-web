@@ -13,6 +13,32 @@ const ru = {
     en: 'English',
   },
 
+  /** Header, navigation, mobile menu */
+  layout: {
+    mainNavigation: 'Основная навигация',
+    openMenu: 'Открыть меню',
+    myTickets: 'Мои обращения',
+    queue: 'Очередь',
+    notifications: 'Уведомления',
+    notificationsUnread: 'Уведомления, непрочитанных: {count}',
+    guest: 'Гость',
+    logout: 'Выйти',
+  },
+
+  common: {
+    comingAtStage: 'Страница появится на этапе {stage}.',
+  },
+
+  tickets: {
+    newTicket: 'Новое обращение',
+    idLabel: 'ID: {id}',
+  },
+
+  notFound: {
+    hint: 'Возможно, адрес набран с ошибкой или страница была удалена.',
+    goHome: 'На главную',
+  },
+
   /** Page titles: the browser tab and the page heading */
   pages: {
     login: 'Вход',

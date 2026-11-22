@@ -12,6 +12,31 @@ const en: MessageSchema = {
     en: 'English',
   },
 
+  layout: {
+    mainNavigation: 'Main navigation',
+    openMenu: 'Open menu',
+    myTickets: 'My tickets',
+    queue: 'Queue',
+    notifications: 'Notifications',
+    notificationsUnread: 'Notifications, unread: {count}',
+    guest: 'Guest',
+    logout: 'Sign out',
+  },
+
+  common: {
+    comingAtStage: 'This page is coming at stage {stage}.',
+  },
+
+  tickets: {
+    newTicket: 'New ticket',
+    idLabel: 'ID: {id}',
+  },
+
+  notFound: {
+    hint: 'The address may be mistyped, or the page has been removed.',
+    goHome: 'Go home',
+  },
+
   pages: {
     login: 'Sign in',
     register: 'Sign up',

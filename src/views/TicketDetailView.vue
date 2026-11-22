@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import PageHeader from '@/components/common/PageHeader.vue'
 import PagePlaceholder from '@/components/common/PagePlaceholder.vue'
 
@@ -8,9 +9,11 @@ import PagePlaceholder from '@/components/common/PagePlaceholder.vue'
 defineProps<{
   id: string
 }>()
+
+const { t } = useI18n()
 </script>
 
 <template>
-  <PageHeader title="Обращение" :subtitle="`ID: ${id}`" />
+  <PageHeader :title="t('pages.ticket')" :subtitle="t('tickets.idLabel', { id })" />
   <PagePlaceholder :stage="4" />
 </template>
