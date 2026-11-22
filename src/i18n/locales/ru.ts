@@ -12,6 +12,44 @@ const ru = {
     ru: 'Русский',
     en: 'English',
   },
+
+  /** Page titles: the browser tab and the page heading */
+  pages: {
+    login: 'Вход',
+    register: 'Регистрация',
+    clientTickets: 'Мои обращения',
+    clientTicketNew: 'Новое обращение',
+    ticket: 'Обращение',
+    operatorQueue: 'Очередь обращений',
+    notFound: 'Страница не найдена',
+  },
+
+  /* ---------- Domain values (keys match the values in utils/constants) ---------- */
+  role: {
+    client: 'Клиент',
+    operator: 'Оператор',
+    admin: 'Администратор',
+  },
+  status: {
+    classifying: 'Анализируется…',
+    open: 'Открыто',
+    in_progress: 'В работе',
+    waiting_for_client: 'Ждём клиента',
+    resolved: 'Решено',
+    closed: 'Закрыто',
+  },
+  category: {
+    billing: 'Оплата',
+    technical: 'Техническая проблема',
+    account: 'Аккаунт',
+    other: 'Другое',
+  },
+  priority: {
+    low: 'Низкий',
+    medium: 'Средний',
+    high: 'Высокий',
+    urgent: 'Срочный',
+  },
 }
 
 export default ru

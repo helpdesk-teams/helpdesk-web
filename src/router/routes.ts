@@ -20,13 +20,13 @@ export const routes: RouteRecordRaw[] = [
     path: '/login',
     name: ROUTE_NAMES.login,
     component: () => import('@/views/auth/LoginView.vue'),
-    meta: { title: 'Вход', layout: 'auth' },
+    meta: { page: 'login', layout: 'auth' },
   },
   {
     path: '/register',
     name: ROUTE_NAMES.register,
     component: () => import('@/views/auth/RegisterView.vue'),
-    meta: { title: 'Регистрация', layout: 'auth' },
+    meta: { page: 'register', layout: 'auth' },
   },
 
   /* ---------- Client ---------- */
@@ -34,21 +34,21 @@ export const routes: RouteRecordRaw[] = [
     path: '/tickets',
     name: ROUTE_NAMES.clientTickets,
     component: () => import('@/views/client/TicketListView.vue'),
-    meta: { title: 'Мои обращения', requiresAuth: true, roles: ['client'] },
+    meta: { page: 'clientTickets', requiresAuth: true, roles: ['client'] },
   },
   {
     // Declared before /tickets/:id, otherwise "new" would be taken as an id
     path: '/tickets/new',
     name: ROUTE_NAMES.clientTicketNew,
     component: () => import('@/views/client/TicketCreateView.vue'),
-    meta: { title: 'Новое обращение', requiresAuth: true, roles: ['client'] },
+    meta: { page: 'clientTicketNew', requiresAuth: true, roles: ['client'] },
   },
   {
     path: '/tickets/:id',
     name: ROUTE_NAMES.clientTicketDetail,
     component: () => import('@/views/TicketDetailView.vue'),
     props: true,
-    meta: { title: 'Обращение', requiresAuth: true, roles: ['client'] },
+    meta: { page: 'ticket', requiresAuth: true, roles: ['client'] },
   },
 
   /* ---------- Operator ---------- */
@@ -56,14 +56,14 @@ export const routes: RouteRecordRaw[] = [
     path: '/operator/queue',
     name: ROUTE_NAMES.operatorQueue,
     component: () => import('@/views/operator/OperatorQueueView.vue'),
-    meta: { title: 'Очередь обращений', requiresAuth: true, roles: ['operator', 'admin'] },
+    meta: { page: 'operatorQueue', requiresAuth: true, roles: ['operator', 'admin'] },
   },
   {
     path: '/operator/tickets/:id',
     name: ROUTE_NAMES.operatorTicketDetail,
     component: () => import('@/views/TicketDetailView.vue'),
     props: true,
-    meta: { title: 'Обращение', requiresAuth: true, roles: ['operator', 'admin'] },
+    meta: { page: 'ticket', requiresAuth: true, roles: ['operator', 'admin'] },
   },
 
   /* ---------- 404: must be the last route ---------- */
@@ -71,6 +71,6 @@ export const routes: RouteRecordRaw[] = [
     path: '/:pathMatch(.*)*',
     name: ROUTE_NAMES.notFound,
     component: () => import('@/views/NotFoundView.vue'),
-    meta: { title: 'Страница не найдена' },
+    meta: { page: 'notFound' },
   },
 ]
