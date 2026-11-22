@@ -8,6 +8,7 @@ import './assets/main.css'
 
 import App from './App.vue'
 import router from './router'
+import { i18n } from './i18n'
 import { ROUTE_NAMES } from './router/types'
 import { USE_MOCKS } from './config'
 import { setSessionExpiredHandler } from './api/client'
@@ -39,6 +40,7 @@ setSessionExpiredHandler(() => {
 const app = createApp(App)
 
 app.use(createPinia())
+app.use(i18n)
 app.use(router)
 app.use(PrimeVue, {
   theme: {
