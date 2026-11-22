@@ -8,7 +8,9 @@ import './assets/main.css'
 
 import App from './App.vue'
 import router from './router'
+import { ROUTE_NAMES } from './router/types'
 import { USE_MOCKS } from './config'
+import { setSessionExpiredHandler } from './api/client'
 
 /**
  * Start MSW before the app sends its first request.
@@ -24,6 +26,15 @@ async function enableMocking() {
   // 'bypass': requests without a handler (Vite files, fonts…) go to the network as usual
   await worker.start({ onUnhandledFrame: 'bypass' })
 }
+
+// When the tokens can't be refreshed, send the user to /login and remember
+// where they were, so after signing in they come back (used at stage 3).
+// Stage 3 will also clear the user in the auth store here.
+setSessionExpiredHandler(() => {
+  const { name, fullPath } = router.currentRoute.value
+  if (name === ROUTE_NAMES.login) return
+  router.push({ name: ROUTE_NAMES.login, query: { redirect: fullPath } })
+})
 
 const app = createApp(App)
 
