@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@primeuix/themes": "^2.0.3",
+    "axios": "^1.21.1",
     "pinia": "^4.0.3",
     "primeicons": "^7.0.0",
     "primevue": "~4.5.5",
@@ -41,6 +42,7 @@
     "jiti": "^2.7.0",
     "jsdom": "^30.0.1",
     "lint-staged": "^17.6.1",
+    "msw": "^3.0.7",
     "npm-run-all2": "^9.0.3",
     "oxlint": "~1.82.0",
     "prettier": "3.9.6",
@@ -62,6 +64,11 @@
     ],
     "*.{css,json,md,yml,yaml}": [
       "prettier --write"
+    ]
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
     ]
   }
 }
