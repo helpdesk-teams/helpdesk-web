@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
 import Button from 'primevue/button'
+
+const { t } = useI18n()
 </script>
 
 <template>
   <section class="not-found">
     <p class="not-found__code">404</p>
-    <h1 class="not-found__title">Страница не найдена</h1>
-    <p class="not-found__text">Возможно, адрес набран с ошибкой или страница была удалена.</p>
+    <h1 class="not-found__title">{{ t('pages.notFound') }}</h1>
+    <p class="not-found__text">{{ t('notFound.hint') }}</p>
     <RouterLink v-slot="{ navigate }" to="/" custom>
-      <Button label="На главную" icon="pi pi-home" @click="navigate" />
+      <Button :label="t('notFound.goHome')" icon="pi pi-home" @click="navigate" />
     </RouterLink>
   </section>
 </template>

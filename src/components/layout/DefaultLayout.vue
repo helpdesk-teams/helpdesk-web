@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import AppHeader from './AppHeader.vue'
 import type { NavItem } from './types'
 import { ROUTE_NAMES } from '@/router/types'
@@ -7,11 +9,14 @@ import { ROUTE_NAMES } from '@/router/types'
 // - user name and logout → auth store (stage 3)
 // - unread count → notifications store (stage 6)
 // - nav items will depend on the user's role (stage 3)
-const navItems: NavItem[] = [
-  { label: 'Мои обращения', icon: 'pi pi-inbox', to: { name: ROUTE_NAMES.clientTickets } },
-  { label: 'Очередь', icon: 'pi pi-list', to: { name: ROUTE_NAMES.operatorQueue } },
-]
-const userName = 'Гость'
+const { t } = useI18n()
+
+// computed: the labels are re-translated when the language changes
+const navItems = computed<NavItem[]>(() => [
+  { label: t('layout.myTickets'), icon: 'pi pi-inbox', to: { name: ROUTE_NAMES.clientTickets } },
+  { label: t('layout.queue'), icon: 'pi pi-list', to: { name: ROUTE_NAMES.operatorQueue } },
+])
+const userName = computed(() => t('layout.guest'))
 const unreadCount = 0
 
 function handleLogout() {

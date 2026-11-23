@@ -39,3 +39,18 @@ describe('router', () => {
     }
   })
 })
+
+describe('document title', () => {
+  it('follows the route and the language', async () => {
+    const { default: router } = await import('@/router')
+    const { setLocale } = await import('@/i18n')
+    const { nextTick } = await import('vue')
+
+    await router.push('/tickets/new')
+    expect(document.title).toBe('Новое обращение · Smart Helpdesk')
+
+    setLocale('en')
+    await nextTick()
+    expect(document.title).toBe('New ticket · Smart Helpdesk')
+  })
+})

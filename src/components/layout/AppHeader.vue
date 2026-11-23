@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import Button from 'primevue/button'
 import Drawer from 'primevue/drawer'
 import OverlayBadge from 'primevue/overlaybadge'
+import LocaleSwitcher from '@/components/common/LocaleSwitcher.vue'
 import AppNavLinks from './AppNavLinks.vue'
 import type { NavItem } from './types'
 
@@ -20,6 +22,8 @@ const emit = defineEmits<{
   openNotifications: []
 }>()
 
+const { t } = useI18n()
+
 // Open/closed state of the mobile menu matters only inside the header,
 // so it is a local ref, not a store.
 const isMenuOpen = ref(false)
@@ -34,26 +38,28 @@ const isMenuOpen = ref(false)
       text
       rounded
       severity="secondary"
-      aria-label="Открыть меню"
+      :aria-label="t('layout.openMenu')"
       :aria-expanded="isMenuOpen"
       @click="isMenuOpen = true"
     />
 
     <RouterLink to="/" class="app-header__logo">
       <i class="pi pi-headphones" aria-hidden="true" />
-      <span>Smart Helpdesk</span>
+      <span>{{ t('app.name') }}</span>
     </RouterLink>
 
     <AppNavLinks :items="navItems" class="app-header__nav" />
 
     <div class="app-header__actions">
+      <LocaleSwitcher class="app-header__locale" />
+
       <!-- The badge is shown only when there is something unread -->
       <OverlayBadge v-if="unreadCount > 0" :value="unreadCount" severity="danger">
         <Button
           icon="pi pi-bell"
           text
           rounded
-          :aria-label="`Уведомления: ${unreadCount} непрочитанных`"
+          :aria-label="t('layout.notificationsUnread', { count: unreadCount })"
           @click="emit('openNotifications')"
         />
       </OverlayBadge>
@@ -62,7 +68,7 @@ const isMenuOpen = ref(false)
         icon="pi pi-bell"
         text
         rounded
-        aria-label="Уведомления"
+        :aria-label="t('layout.notifications')"
         @click="emit('openNotifications')"
       />
 
@@ -76,19 +82,22 @@ const isMenuOpen = ref(false)
         text
         rounded
         severity="secondary"
-        aria-label="Выйти"
+        :aria-label="t('layout.logout')"
         @click="emit('logout')"
       />
     </div>
 
     <!-- Mobile menu: slides in from the left -->
-    <Drawer v-model:visible="isMenuOpen" header="Smart Helpdesk">
+    <Drawer v-model:visible="isMenuOpen" :header="t('app.name')">
       <AppNavLinks :items="navItems" vertical @navigate="isMenuOpen = false" />
       <template #footer>
-        <span class="app-header__drawer-user">
-          <i class="pi pi-user" aria-hidden="true" />
-          {{ userName }}
-        </span>
+        <div class="app-header__drawer-footer">
+          <span class="app-header__drawer-user">
+            <i class="pi pi-user" aria-hidden="true" />
+            {{ userName }}
+          </span>
+          <LocaleSwitcher />
+        </div>
       </template>
     </Drawer>
   </header>
@@ -143,6 +152,17 @@ const isMenuOpen = ref(false)
   color: var(--p-text-muted-color);
 }
 
+.app-header__drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.app-header__locale {
+  margin-right: 8px;
+}
+
 /* The menu button exists only on narrow screens */
 .app-header__menu-button {
   display: none;
@@ -159,8 +179,10 @@ const isMenuOpen = ref(false)
     display: inline-flex;
   }
 
+  /* On a phone the language switch lives in the mobile menu */
   .app-header__nav,
-  .app-header__user {
+  .app-header__user,
+  .app-header__locale {
     display: none;
   }
 }

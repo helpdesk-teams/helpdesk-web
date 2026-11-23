@@ -1,4 +1,8 @@
 import type { Role } from '@/utils/constants'
+import type { MessageSchema } from '@/i18n/locales/ru'
+
+/** A page name from the translations: 'clientTickets' → t('pages.clientTickets') */
+export type PageKey = keyof MessageSchema['pages']
 
 /** Which page frame to render around the route (see App.vue). */
 export type LayoutName = 'default' | 'auth'
@@ -9,8 +13,8 @@ export type LayoutName = 'default' | 'auth'
  */
 declare module 'vue-router' {
   interface RouteMeta {
-    /** Page title for the browser tab */
-    title?: string
+    /** Page name for the browser tab title, translated via t(`pages.${page}`) */
+    page?: PageKey
     /** Page frame; 'default' when omitted */
     layout?: LayoutName
     /** true → only signed-in users (enforced by guards at stage 3) */

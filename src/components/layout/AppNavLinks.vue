@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import type { NavItem } from './types'
 
 // Same list of links for the header (horizontal) and the mobile menu (vertical)
@@ -11,13 +12,15 @@ defineProps<{
 const emit = defineEmits<{
   navigate: []
 }>()
+
+const { t } = useI18n()
 </script>
 
 <template>
   <nav
     class="nav-links"
     :class="{ 'nav-links--vertical': vertical }"
-    aria-label="Основная навигация"
+    :aria-label="t('layout.mainNavigation')"
   >
     <RouterLink
       v-for="item in items"

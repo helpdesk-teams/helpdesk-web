@@ -37,7 +37,11 @@ describe('apiClient', () => {
 
   it('turns a contract error into ApiError with code and message', async () => {
     const error = await failure(apiClient.get('/auth/me')) // no token
-    expect(error).toMatchObject({ status: 401, code: 'UNAUTHORIZED', message: 'Требуется вход' })
+    expect(error).toMatchObject({
+      status: 401,
+      code: 'UNAUTHORIZED',
+      message: 'Нужно войти в систему',
+    })
   })
 
   it('exposes per-field validation errors for forms', async () => {

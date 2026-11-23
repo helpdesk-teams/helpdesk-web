@@ -1,16 +1,25 @@
 import { describe, it, expect } from 'vitest'
 import {
-  TICKET_STATUSES,
-  TICKET_STATUS_META,
-  canTransition,
+  ROLES,
+  TICKET_CATEGORIES,
   TICKET_PRIORITIES,
   TICKET_PRIORITY_META,
+  TICKET_STATUSES,
+  canTransition,
 } from '@/utils/constants'
+import { i18n, SUPPORTED_LOCALES } from '@/i18n'
 
 describe('constants', () => {
-  it('has a label for every status', () => {
-    for (const status of TICKET_STATUSES) {
-      expect(TICKET_STATUS_META[status].label).toBeTruthy()
+  it('every domain value has a translation in every language', () => {
+    const keys = [
+      ...TICKET_STATUSES.map((v) => `status.${v}`),
+      ...TICKET_CATEGORIES.map((v) => `category.${v}`),
+      ...TICKET_PRIORITIES.map((v) => `priority.${v}`),
+      ...ROLES.map((v) => `role.${v}`),
+    ]
+    for (const locale of SUPPORTED_LOCALES) {
+      const missing = keys.filter((key) => !i18n.global.te(key, locale))
+      expect(missing, `missing in "${locale}"`).toEqual([])
     }
   })
 

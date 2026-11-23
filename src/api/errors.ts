@@ -1,19 +1,20 @@
 import { isAxiosError } from 'axios'
+import { i18n } from '@/i18n'
 import type { ErrorResponseDto } from './dto'
 
 /**
  * The only error type pages and stores ever see from the API layer.
  * Whatever went wrong (server error, validation, no network), they get
- * a readable `message` to show and fields to decide what to do.
+ * a readable `message` in the UI language and fields to decide what to do.
  */
 export class ApiError extends Error {
   constructor(
     message: string,
     /** HTTP status; 0 when there was no response at all */
     readonly status: number,
-    /** Machine-readable code from the server, e.g. "INVALID_CREDENTIALS" */
+    /** Machine-readable code, e.g. "INVALID_CREDENTIALS" */
     readonly code: string,
-    /** Per-field messages for forms: { email: 'Некорректный email' } */
+    /** Per-field messages for forms: { email: '…' } (as sent by the server) */
     readonly fieldErrors: Record<string, string> = {},
   ) {
     super(message)
@@ -26,18 +27,32 @@ export class ApiError extends Error {
   }
 }
 
-/** Fallback texts when the server didn't send its own message */
-const STATUS_MESSAGES: Record<number, string> = {
-  400: 'Проверьте введённые данные',
-  401: 'Нужно войти в систему',
-  403: 'Недостаточно прав для этого действия',
-  404: 'Не найдено',
-  409: 'Действие сейчас невозможно, обновите страницу',
-  429: 'Слишком много запросов, попробуйте чуть позже',
+/**
+ * The text to show, in the current UI language:
+ * 1. a translation of the code (errors.code.INVALID_CREDENTIALS) — the server
+ *    may answer in any language, but the code is the same for everyone
+ * 2. the server's own message, for codes we don't know yet
+ * 3. a general text by HTTP status
+ */
+function messageFor(code: string, status: number, serverMessage?: string): string {
+  const { t, te } = i18n.global
+  if (te(`errors.code.${code}`)) return t(`errors.code.${code}`)
+  if (serverMessage) return serverMessage
+  if (status < 500 && te(`errors.status.http${status}`)) return t(`errors.status.http${status}`)
+  return t('errors.server')
 }
-const SERVER_ERROR_MESSAGE = 'Ошибка на сервере, попробуйте позже'
-const NETWORK_ERROR_MESSAGE = 'Сервер недоступен. Проверьте подключение к интернету'
-const TIMEOUT_MESSAGE = 'Сервер долго не отвечает, попробуйте ещё раз'
+
+/** Builds an ApiError with a translated message */
+export function createApiError(
+  code: string,
+  status: number,
+  {
+    serverMessage,
+    fieldErrors,
+  }: { serverMessage?: string; fieldErrors?: Record<string, string> } = {},
+) {
+  return new ApiError(messageFor(code, status, serverMessage), status, code, fieldErrors)
+}
 
 function isErrorBody(data: unknown): data is ErrorResponseDto {
   return typeof (data as ErrorResponseDto | undefined)?.error?.message === 'string'
@@ -56,29 +71,21 @@ function toFieldErrors(details: unknown): Record<string, string> {
 /** Turns anything thrown by axios (or our code) into an ApiError */
 export function toApiError(error: unknown): ApiError {
   if (error instanceof ApiError) return error
-
-  if (!isAxiosError(error)) {
-    return new ApiError(SERVER_ERROR_MESSAGE, 0, 'UNKNOWN')
-  }
+  if (!isAxiosError(error)) return createApiError('UNKNOWN', 0)
 
   // The request never got a response
   if (!error.response) {
-    return error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT'
-      ? new ApiError(TIMEOUT_MESSAGE, 0, 'TIMEOUT')
-      : new ApiError(NETWORK_ERROR_MESSAGE, 0, 'NETWORK_ERROR')
+    const timedOut = error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT'
+    return createApiError(timedOut ? 'TIMEOUT' : 'NETWORK_ERROR', 0)
   }
 
   const { status, data } = error.response
   if (isErrorBody(data)) {
-    return new ApiError(
-      data.error.message,
-      status,
-      data.error.code,
-      toFieldErrors(data.error.details),
-    )
+    return createApiError(data.error.code, status, {
+      serverMessage: data.error.message,
+      fieldErrors: toFieldErrors(data.error.details),
+    })
   }
   // A response, but not in the contract format (e.g. a proxy's HTML error page)
-  const message =
-    status >= 500 ? SERVER_ERROR_MESSAGE : (STATUS_MESSAGES[status] ?? SERVER_ERROR_MESSAGE)
-  return new ApiError(message, status, `HTTP_${status}`)
+  return createApiError(`HTTP_${status}`, status)
 }
