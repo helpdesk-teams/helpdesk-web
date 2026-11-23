@@ -39,6 +39,35 @@ const ru = {
     goHome: 'На главную',
   },
 
+  /** API errors, shown by `code` in the UI language (see api/errors.ts) */
+  errors: {
+    code: {
+      VALIDATION_ERROR: 'Проверьте поля формы',
+      INVALID_CREDENTIALS: 'Неверный email или пароль',
+      EMAIL_TAKEN: 'Пользователь с таким email уже зарегистрирован',
+      UNAUTHORIZED: 'Нужно войти в систему',
+      TOKEN_EXPIRED: 'Сессия истекла, войдите снова',
+      INVALID_REFRESH_TOKEN: 'Сессия истекла, войдите снова',
+      SESSION_EXPIRED: 'Сессия истекла, войдите снова',
+      FORBIDDEN: 'Недостаточно прав для этого действия',
+      NOT_FOUND: 'Не найдено',
+      INVALID_TRANSITION: 'Нельзя перевести обращение в этот статус',
+      TICKET_CLOSED: 'Обращение закрыто, ответить нельзя',
+      NETWORK_ERROR: 'Сервер недоступен. Проверьте подключение к интернету',
+      TIMEOUT: 'Сервер долго не отвечает, попробуйте ещё раз',
+    },
+    /** When the server sent no known code: a text by HTTP status */
+    status: {
+      http400: 'Проверьте введённые данные',
+      http401: 'Нужно войти в систему',
+      http403: 'Недостаточно прав для этого действия',
+      http404: 'Не найдено',
+      http409: 'Действие сейчас невозможно, обновите страницу',
+      http429: 'Слишком много запросов, попробуйте чуть позже',
+    },
+    server: 'Ошибка на сервере, попробуйте позже',
+  },
+
   /** Page titles: the browser tab and the page heading */
   pages: {
     login: 'Вход',

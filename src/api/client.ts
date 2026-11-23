@@ -1,7 +1,7 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { API_URL } from '@/config'
 import type { TokenPairDto } from './dto'
-import { ApiError, toApiError } from './errors'
+import { createApiError, toApiError } from './errors'
 import { tokenStorage } from './tokenStorage'
 
 /**
@@ -31,7 +31,7 @@ export function setSessionExpiredHandler(handler: () => void) {
   onSessionExpired = handler
 }
 
-const SESSION_EXPIRED = () => new ApiError('Сессия истекла, войдите снова', 401, 'SESSION_EXPIRED')
+const SESSION_EXPIRED = () => createApiError('SESSION_EXPIRED', 401)
 
 /* ---------- Refresh: one request, shared by everyone who waits ---------- */
 
