@@ -8,7 +8,8 @@ import './assets/main.css'
 
 import App from './App.vue'
 import router from './router'
-import { i18n } from './i18n'
+import { detectLocale, i18n, setLocale } from './i18n'
+import { initPrimeVueLocale } from './i18n/primevue'
 import { ROUTE_NAMES } from './router/types'
 import { USE_MOCKS } from './config'
 import { setSessionExpiredHandler } from './api/client'
@@ -52,5 +53,10 @@ app.use(PrimeVue, {
     },
   },
 })
+
+// Keep PrimeVue's built-in texts in sync with the UI language.
+// `initPrimeVueLocale` grabs the live config object created by `app.use(PrimeVue)`.
+initPrimeVueLocale(app.config.globalProperties.$primevue.config)
+setLocale(detectLocale())
 
 enableMocking().then(() => app.mount('#app'))

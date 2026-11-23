@@ -1,6 +1,7 @@
 import { createI18n } from 'vue-i18n'
 import ru, { type MessageSchema } from './locales/ru'
 import en from './locales/en'
+import { setPrimeVueLocale } from './primevue'
 
 /*
  * Tells vue-i18n the shape of our messages, so the editor autocompletes keys in t('...').
@@ -61,6 +62,7 @@ export const currentLocale = (): AppLocale => i18n.global.locale.value
 export function setLocale(locale: AppLocale) {
   i18n.global.locale.value = locale
   document.documentElement.lang = locale
+  setPrimeVueLocale(locale)
   try {
     localStorage.setItem(STORAGE_KEY, locale)
   } catch {
